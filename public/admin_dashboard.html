@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  <link rel="stylesheet" href="/assets/css/dashboard.css">
+
+  <style>
+    /* Add the updated CSS */
+    #imageGallery img {
+      width: 100%;
+      height: 300px;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 h-screen">
+  <div class="flex justify-between items-center bg-white p-6 shadow-lg">
+    <h1 class="text-3xl font-semibold">Admin Dashboard</h1>
+    <div>
+      <button id="logoutBtn" class="bg-red-500 text-white px-4 py-2 rounded">Logout</button>
+    </div>
+  </div>
+
+  <div class="container mx-auto mt-8 p-6 bg-white rounded shadow-lg">
+    <h2 class="text-2xl font-semibold mb-4">Manage Images by Category</h2>
+
+    <form id="imageForm" enctype="multipart/form-data">
+      <div class="mb-4">
+        <label for="category" class="block text-gray-700">Select Category:</label>
+        <select id="category" name="category" class="w-full px-4 py-2 border rounded">
+          <option value="trophies">Trophies</option>
+          <!-- Add other categories as needed -->
+          <option value="keychains">Keychains</option>
+          <option value="pens">Pens</option>
+          <option value="diary">Diaries</option>
+          <option value="photoframe">Photo Frames</option>
+          <option value="mugs">Mugs</option>
+          <option value="nameplates">Name Plates</option>
+          <option value="housnameplates">House Name Plates</option>
+          <option value="momento">Mementos</option>
+          <option value="bottle">Bottles</option>
+          <option value="uv">UV DTF Stickers</option>
+          <option value="neon">Neon Lights</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label for="images" class="block text-gray-700">Upload Images:</label>
+        <input type="file" id="images" name="images" accept="image/*" multiple class="w-full px-4 py-2 border rounded">
+      </div>
+
+      <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Upload</button>
+    </form>
+
+    <div id="imageGallery" class="mt-8">
+      <h2 class="text-xl font-semibold mb-4">Images in <span id="categoryName">Trophies</span></h2>
+      <div class="grid grid-cols-3 gap-4" id="imageList">
+        <!-- Images will be dynamically loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Password Change Section -->
+  <div class="container mx-auto mt-8 p-6 bg-white rounded shadow-lg">
+    <h2 class="text-2xl font-semibold mb-4">Change Password</h2>
+
+    <form id="passwordForm">
+      <div class="mb-4">
+        <label for="currentPassword" class="block text-gray-700">Current Password:</label>
+        <input type="password" id="currentPassword" name="currentPassword" class="w-full px-4 py-2 border rounded" required>
+      </div>
+
+      <div class="mb-4 relative">
+        <label for="newPassword" class="block text-gray-700">New Password:</label>
+        <input type="password" id="newPassword" name="newPassword" class="w-full px-4 py-2 border rounded" required>
+        <button type="button" onclick="togglePassword('newPassword')" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+          👁️
+        </button>
+      </div>
+
+      <div class="mb-4 relative">
+        <label for="confirmPassword" class="block text-gray-700">Confirm New Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" class="w-full px-4 py-2 border rounded" required>
+        <button type="button" onclick="togglePassword('confirmPassword')" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+          👁️
+        </button>
+      </div>
+
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Change Password</button>
+    </form>
+  </div>
+
+  
+  
+  <script>
+    function togglePassword(fieldId) {
+      const field = document.getElementById(fieldId);
+      field.type = field.type === 'password' ? 'text' : 'password';
+    }
+
+    // Handle logout
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      fetch('/admin/logout', { method: 'GET' })
+      .then(() => window.location.href = '/admin/login')
+      .catch(err => alert('Error logging out'));
+    });
+
+    // Handle image upload
+    document.getElementById('imageForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+      fetch('/admin/upload-images', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Images uploaded successfully');
+          loadImages(); // Reload images after upload
+        } else {
+          alert('Error uploading images');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong');
+      });
+    });
+
+    // Load images when category is selected
+    document.getElementById('category').addEventListener('change', function() {
+      loadImages();
+    });
+
+    // Fetch and display images for the selected category
+    function loadImages() {
+      const category = document.getElementById('category').value;
+      document.getElementById('categoryName').innerText = category.charAt(0).toUpperCase() + category.slice(1);
+      fetch(`/images/${category}`)
+      .then(response => response.json())
+      .then(data => {
+        const imageList = document.getElementById('imageList');
+        imageList.innerHTML = ''; // Clear existing images
+
+        if (data.images && data.images.length > 0) {
+          data.images.forEach(image => {
+            const imgElement = document.createElement('div');
+            imgElement.innerHTML = `
+              <img src="${image.path}" class="w-full h-auto" alt="${category} Image">
+              <button class="bg-red-500 text-white px-2 py-1 mt-2 rounded delete-btn" data-id="${image._id}">Delete</button>
+            `;
+            imageList.appendChild(imgElement);
+          });
+
+          // Add event listener to delete buttons
+          document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+              deleteImage(this.getAttribute('data-id'), category);
+            });
+          });
+        } else {
+          imageList.innerHTML = '<p>No images found for this category.</p>';
+        }
+      });
+    }
+
+    // Delete image
+    function deleteImage(imageId, category) {
+      fetch(`/admin/images/${category}/${imageId}`, { method: 'DELETE' })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Image deleted successfully');
+          loadImages(); // Reload images after deletion
+        } else {
+          alert('Error deleting image');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong');
+      });
+    }
+
+    // Load images for the default selected category on page load
+    window.onload = function() {
+      loadImages();
+    };
+
+    // Handle password change
+    document.getElementById('passwordForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (newPassword !== confirmPassword) {
+        alert("New passwords do not match!");
+        return;
+      }
+
+      const currentPassword = document.getElementById('currentPassword').value;
+      fetch('/admin/change-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ currentPassword, newPassword })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Password changed successfully') {
+          alert('Password changed successfully');
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong');
+      });
+    });
+  </script>
+</body>
+</html>
