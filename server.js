@@ -7,25 +7,23 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
 require('dotenv').config();
+const cloudinary = require('cloudinary').v2;
+
+// Cloudinary configuration
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET
+});
 
 const Image = require('./models/Image'); // Importing Image model correctly
 const Admin = require('./models/Admin'); // Admin model for password management
 
 const app = express();
 
-// Set up Multer for image uploads (memory storage for form submissions, disk storage for admin panel)
+// Set up Multer for image uploads (memory storage for form submissions, Cloudinary for admin panel)
 const memoryStorage = multer.memoryStorage();  // For u_reg.html form submissions
 const uploadMemory = multer({ storage: memoryStorage });
-
-const diskStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');  // Ensure 'uploads' folder exists
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);  // Filename with timestamp
-  }
-});
-const uploadDisk = multer({ storage: diskStorage });  // For admin image uploads
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -106,22 +104,31 @@ app.post('/submit', uploadMemory.array('photos', 3), async (req, res) => {
   }
 });
 
-// Admin image upload functionality (disk storage)
-app.post('/admin/upload-images', uploadDisk.array('images', 10), async (req, res) => {
-  console.log(req.files);  // Log the files to debug
+// Admin image upload functionality (Cloudinary)
+app.post('/admin/upload-images', uploadMemory.array('images', 10), async (req, res) => {
   const category = req.body.category;
-  const files = req.files;
 
   try {
-    const imageDocs = files.map(file => ({
-      category,
-      path: `/uploads/${file.filename}`,
-      filename: file.originalname
-    }));
-    await Image.insertMany(imageDocs);
+    const uploadPromises = req.files.map(file => {
+      return new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream((error, result) => {
+          if (error) return reject(error);
+          resolve({
+            category,
+            path: result.secure_url,  // Cloudinary URL
+            filename: result.public_id  // Cloudinary public ID
+          });
+        }).end(file.buffer);
+      });
+    });
+
+    const imageDocs = await Promise.all(uploadPromises);
+    await Image.insertMany(imageDocs);  // Store Cloudinary URLs in MongoDB
+
     res.json({ success: true });
   } catch (error) {
-    res.json({ success: false, error: error.message });
+    console.error('Error uploading images:', error);
+    res.status(500).json({ success: false, message: 'Error uploading images' });
   }
 });
 
@@ -151,24 +158,16 @@ app.delete('/admin/images/:category/:id', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Image not found' });
     }
 
-    // Delete the image from the database
+    // Delete the image from Cloudinary
+    await cloudinary.uploader.destroy(image.filename);  // Use Cloudinary public ID
+
+    // Delete the image record from MongoDB
     await Image.findByIdAndDelete(id);
 
-    // Remove the file from the 'uploads' folder
-    const imagePath = path.join(__dirname, image.path);
-    fs.unlink(imagePath, (err) => {
-      if (err) {
-        console.error('Error deleting file:', err);
-        return res.status(500).json({ success: false, message: 'Error deleting image file' });
-      }
-
-      // Respond with success if both the file and the DB record are deleted
-      res.json({ success: true, message: 'Image deleted successfully' });
-    });
-
+    res.json({ success: true, message: 'Image deleted successfully' });
   } catch (error) {
     console.error('Error deleting image:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, message: 'Error deleting image' });
   }
 });
 
