@@ -1330,3 +1330,171 @@ body {
   background-color: #182b47;
 }
 
+
+
+/* Media Queries for Mobile Responsiveness */
+
+@media (max-width: 575px) {
+  /* General container adjustments */
+  .container {
+    padding: 10px; /* Reduce padding for smaller screens */
+  }
+
+  /* Hero section adjustments */
+  .hero {
+    padding-block-start: 50px; /* Reduce top padding */
+  }
+
+  .hero-title {
+    font-size: 2rem; /* Reduce hero title size */
+  }
+
+  .hero-text {
+    font-size: 1.4rem; /* Adjust hero text for readability */
+    margin-block: 20px; /* Reduce vertical margin */
+  }
+
+  .btn-wrapper {
+    flex-direction: column; /* Stack buttons vertically on mobile */
+    gap: 10px; /* Add space between buttons */
+  }
+
+  .hero-banner {
+    max-width: 100%; /* Ensure banner fits mobile screens */
+    margin: 0 auto; /* Center the banner */
+  }
+
+  .banner-2 {
+    top: -40px; /* Adjust the position of banner 2 */
+  }
+
+  /* Navbar adjustments */
+  .navbar-list {
+    flex-direction: column; /* Stack navbar items vertically */
+    gap: 15px; /* Add space between navbar items */
+  }
+
+  .navbar-link {
+    font-size: 1.4rem; /* Adjust navbar link font size */
+  }
+
+  /* Product card adjustments */
+  .product-card {
+    margin-bottom: 20px; /* Add space between product cards */
+  }
+
+  .product-card .card-title {
+    font-size: 1.4rem; /* Adjust product card title size */
+  }
+
+  /* Footer adjustments */
+  .footer-list {
+    margin-bottom: 20px; /* Add space between footer sections */
+  }
+
+  .footer-text {
+    font-size: 1.2rem; /* Reduce footer text size */
+  }
+
+  /* Feature section adjustments */
+  .feature-card {
+    padding: 10px; /* Reduce padding inside feature cards */
+    flex-direction: column; /* Stack feature card content vertically */
+    text-align: center; /* Center content */
+  }
+
+  .feature-card .card-title {
+    font-size: 1.6rem; /* Adjust card title size */
+  }
+
+  /* Reduce padding around feature icons */
+  .feature-card .card-icon {
+    margin-bottom: 15px;
+  }
+
+  /* Safe delivery icons */
+  .card-icon img {
+    width: 80px;
+  }
+}
+
+/* Tablets (576px to 768px) */
+@media (min-width: 576px) and (max-width: 768px) {
+  .container {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  /* Hero section adjustments */
+  .hero {
+    padding-block-start: 100px;
+  }
+
+  .hero-title {
+    font-size: 2.4rem;
+  }
+
+  .hero-text {
+    font-size: 1.6rem;
+    margin-block: 30px;
+  }
+
+  /* Navbar adjustments */
+  .navbar-list {
+    gap: 25px;
+  }
+
+  .navbar-link {
+    font-size: 1.6rem;
+  }
+
+  /* Product card adjustments */
+  .product-card .card-title {
+    font-size: 1.6rem;
+  }
+
+  /* Footer adjustments */
+  .footer-text {
+    font-size: 1.4rem;
+  }
+}
+
+/* Larger mobile screens (768px to 992px) */
+@media (min-width: 768px) and (max-width: 992px) {
+  .container {
+    max-width: 90%;
+    padding: 30px;
+  }
+
+  /* Hero section adjustments */
+  .hero-title {
+    font-size: 2.8rem;
+  }
+
+  .hero-text {
+    font-size: 1.8rem;
+    margin-block: 40px;
+  }
+
+  .btn-wrapper {
+    gap: 20px;
+  }
+
+  .hero-banner {
+    max-width: 75%;
+  }
+
+  /* Footer adjustments */
+  .footer-text {
+    font-size: 1.6rem;
+  }
+
+  /* Feature card adjustments */
+  .feature-card {
+    padding: 20px;
+  }
+
+  .feature-card .card-title {
+    font-size: 1.8rem;
+  }
+}
