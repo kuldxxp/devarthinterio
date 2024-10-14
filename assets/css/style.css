@@ -1403,3 +1403,54 @@ body {
     margin-top: 10px; /* Reduce spacing between hero elements */
   }
 }
+
+/* 2ndnew */
+@media (max-width: 575px) {
+  .header-top .input-wrapper,
+  .header-contact-link {
+    display: block !important;
+  }
+
+  .navbar-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar-link {
+    font-size: 1.6rem; /* Ensure links are large enough */
+    margin-bottom: 10px;
+  }
+}
+@media (max-width: 575px) {
+  .hero {
+    padding-block-start: 60px; /* Reduce space above hero section */
+  }
+
+  .h1.hero-title {
+    font-size: 2.2rem; /* Scale down the heading font sizes */
+  }
+
+  .hero-text {
+    font-size: 1.4rem; /* Reduce hero text size */
+  }
+
+  .btn {
+    padding: 12px 20px; /* Reduce button padding */
+    font-size: 1.2rem;  /* Reduce font size */
+  }
+
+  .hero-banner {
+    max-width: 250px; /* Adjust banner size */
+  }
+}
+@media (max-width: 575px) {
+  .footer-list {
+    text-align: center;
+  }
+
+  .footer-link {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
