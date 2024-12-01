@@ -377,7 +377,9 @@ async function viewFormDetails(id) {
     content.innerHTML = `<p class="error">Error loading form details: ${error.message}</p>`;
   }
 }
-
+document.getElementById('closeModal').addEventListener('click', () => {
+  document.getElementById('formDetailsModal').classList.remove('active'); // Hides the modal
+});
 // Delete Form Response
 async function deleteFormResponse(id) {
   if (!confirm('Are you sure you want to delete this form response?')) return;
