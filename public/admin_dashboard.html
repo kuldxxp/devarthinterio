@@ -414,7 +414,39 @@
       });
     }
     
-  
+    document.getElementById('passwordForm').addEventListener('submit', async function (event) {
+      event.preventDefault(); // Prevent default form submission
+    
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+    
+      if (newPassword !== confirmPassword) {
+        alert('New passwords do not match');
+        return;
+      }
+    
+      try {
+        const response = await fetch('/admin/change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
+        });
+    
+        const data = await response.json();
+    
+        if (data.success) {
+          alert('Password changed successfully');
+          document.getElementById('passwordForm').reset();
+        } else {
+          alert(data.message);
+        }
+      } catch (error) {
+        console.error('Error changing password:', error);
+        alert('Something went wrong. Please try again.');
+      }
+    });
+    
   
   
   
