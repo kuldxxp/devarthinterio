@@ -413,7 +413,6 @@ cron.schedule('0 0 1 * *', async () => {
     console.error('Error during monthly cleanup:', error);
   }
 });
-const bcrypt = require('bcryptjs'); // Import bcrypt for hashing
 
 const bcrypt = require('bcryptjs'); // Required for password hashing and comparison
 
