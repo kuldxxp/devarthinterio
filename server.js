@@ -216,29 +216,29 @@ app.get('/images/:category', async (req, res) => {
 const adminRoutes = require('./routes/admin');
 app.use('/admin', adminRoutes);
 
-// Admin image delete functionality
-// app.delete('/admin/images/:category/:id', async (req, res) => {
-//   const { category, id } = req.params;
+//Admin image delete functionality
+app.delete('/admin/images/:category/:id', async (req, res) => {
+  const { category, id } = req.params;
 
-//   try {
-//     // Find the image by ID
-//     const image = await Image.findById(id);
-//     if (!image) {
-//       return res.status(404).json({ success: false, message: 'Image not found' });
-//     }
+  try {
+    // Find the image by ID
+    const image = await Image.findById(id);
+    if (!image) {
+      return res.status(404).json({ success: false, message: 'Image not found' });
+    }
 
-//     // Delete the image from Cloudinary
-//     await cloudinary.uploader.destroy(image.filename);  // Use Cloudinary public ID
+    // Delete the image from Cloudinary
+    await cloudinary.uploader.destroy(image.filename);  // Use Cloudinary public ID
 
-//     // Delete the image record from MongoDB
-//     await Image.findByIdAndDelete(id);
+    // Delete the image record from MongoDB
+    await Image.findByIdAndDelete(id);
 
-//     res.json({ success: true, message: 'Image deleted successfully' });
-//   } catch (error) {
-//     console.error('Error deleting image:', error);
-//     res.status(500).json({ success: false, message: 'Error deleting image' });
-//   }
-// });
+    res.json({ success: true, message: 'Image deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting image:', error);
+    res.status(500).json({ success: false, message: 'Error deleting image' });
+  }
+});
 app.delete('/admin/form-responses/:id', async (req, res) => {
   const { id } = req.params;
 
