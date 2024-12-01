@@ -3,7 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const path = require('path');
-const Admin = require('../models/Admin');  // Assuming Admin model is already defined
+const Admin = require('../models/Admin'); 
 
 // Admin login route (GET)
 router.get('/login', (req, res) => {
