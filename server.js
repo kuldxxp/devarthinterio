@@ -413,3 +413,42 @@ cron.schedule('0 0 1 * *', async () => {
     console.error('Error during monthly cleanup:', error);
   }
 });
+const bcrypt = require('bcryptjs'); // Import bcrypt for hashing
+
+const bcrypt = require('bcryptjs'); // Required for password hashing and comparison
+
+app.post('/admin/change-password', async (req, res) => {
+  const { currentPassword, newPassword, confirmPassword } = req.body;
+
+  // Ensure new passwords match
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ success: false, message: 'New passwords do not match' });
+  }
+
+  try {
+    // Fetch the admin user
+    const admin = await Admin.findOne(); // Assuming a single admin user
+    if (!admin) {
+      return res.status(404).json({ success: false, message: 'Admin user not found' });
+    }
+
+    // Validate current password
+    const isMatch = await bcrypt.compare(currentPassword, admin.password);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: 'Current password is incorrect' });
+    }
+
+    // Hash the new password and update it
+    const salt = await bcrypt.genSalt(10);
+    admin.password = await bcrypt.hash(newPassword, salt);
+
+    await admin.save();
+
+    res.json({ success: true, message: 'Password changed successfully' });
+  } catch (error) {
+    console.error('Error changing password:', error);
+    res.status(500).json({ success: false, message: 'Error changing password' });
+  }
+});
+
+
