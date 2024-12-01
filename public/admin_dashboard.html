@@ -10,27 +10,54 @@
   <style>
     #imageList {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      padding: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid */
+      gap: 20px; /* Space between grid items */
+      margin-top: 20px; /* Add some spacing above */
     }
-    
-    #imageGallery img {
-      width: 100%;
-      height: 300px; /* Fixed height for consistency */
-      object-fit: cover; /* Ensures the image fills the container */
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for better aesthetics */
-    }
-    
-    #imageList div {
+  
+    /* Individual image item */
+    .image-item {
       display: flex;
       flex-direction: column; /* Stack image and button */
-      align-items: center; /* Center align horizontally */
-      justify-content: space-between; /* Space out items vertically */
+      align-items: center; /* Center content */
+      justify-content: space-between; /* Distribute space evenly */
+      background: #fff; /* White background for contrast */
+      padding: 15px; /* Padding around the item */
+      border-radius: 8px; /* Rounded corners */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      transition: transform 0.2s ease; /* Animation on hover */
     }
-    
-    
+  
+    /* Image styling */
+    .image-item img {
+      max-width: 100%; /* Make the image responsive */
+      height: auto; /* Maintain aspect ratio */
+      border-radius: 4px; /* Rounded corners */
+      margin-bottom: 10px; /* Space below image */
+    }
+  
+    /* Delete button styling */
+    .image-item .delete-btn {
+      width: 100%; /* Make the button full-width */
+      max-width: 120px; /* Limit button width */
+      padding: 8px 16px;
+      background: #dc3545; /* Red background */
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: center; /* Center text */
+      transition: background 0.2s ease; /* Smooth hover effect */
+    }
+  
+    .image-item .delete-btn:hover {
+      background: #a71d2a; /* Darker red on hover */
+    }
+  
+    /* Hover effect for the image item */
+    .image-item:hover {
+      transform: translateY(-5px); /* Slight upward movement */
+    }
     canvas {
       width: 100% !important; /* Force full width */
       height: auto !important; /* Adjust height based on width */
@@ -187,43 +214,53 @@
   <!-- Main Content -->
   <div class="content">
     <!-- Image Management Section -->
-    <div id="image-management" class="section active">
-      <h2 class="text-2xl font-semibold">
-        Image Management for <span id="categoryName">Default</span>
-      </h2>
-      <form id="imageForm" enctype="multipart/form-data">
-        <div class="form-group">
-          <label for="category" class="block text-gray-700">Select Category:</label>
-          <select id="category" name="category" class="w-full px-4 py-2 border rounded">
-            <option value="trophies">Trophies</option>
-            <option value="keychains">Keychains</option>
-            <option value="pens">Pens</option>
-            <option value="diary">Diaries</option>
-            <option value="photoframe">Photo Frames</option>
-            <option value="mugs">Mugs</option>
-            <option value="nameplates">Name Plates</option>
-            <option value="housenameplates">House Name Plates</option>
-            <option value="memento">Mementos</option>
-            <option value="bottle">Bottles</option>
-            <option value="uv">UV DTF Stickers</option>
-            <option value="neon">Neon Lights</option>
-          </select>
-        </div>
-    
-        <div class="form-group">
-          <label for="images" class="block text-gray-700">Upload Images:</label>
-          <input type="file" id="images" name="images" accept="image/*" multiple class="w-full px-4 py-2 border rounded">
-        </div>
-    
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Upload</button>
-      </form>
-    
-      <!-- Image List Container -->
-      <div id="imageList" class="grid grid-cols-3 gap-4">
-        <!-- Dynamically loaded images will appear here -->
-      </div>
-      
-    
+<div id="image-management" class="section active">
+  <h2 class="text-2xl font-semibold">Image Management</h2>
+  <form id="imageForm" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="category" class="block text-gray-700 font-medium">Select Category:</label>
+      <select id="category" name="category" class="w-full px-4 py-2 border rounded bg-white text-gray-800" required>
+        <option value="" disabled selected>Select a category</option> <!-- Placeholder -->
+        <option value="trophies">Trophies</option>
+        <option value="keychains">Keychains</option>
+        <option value="pens">Pens</option>
+        <option value="diary">Diaries</option>
+        <option value="photoframe">Photo Frames</option>
+        <option value="mugs">Mugs</option>
+        <option value="nameplates">Name Plates</option>
+        <option value="housenameplates">House Name Plates</option>
+        <option value="memento">Mementos</option>
+        <option value="bottle">Bottles</option>
+        <option value="uv">UV DTF Stickers</option>
+        <option value="neon">Neon Lights</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="images" class="block text-gray-700 font-medium mt-4">Upload Images:</label>
+      <input
+        type="file"
+        id="images"
+        name="images"
+        accept="image/*"
+        multiple
+        class="w-full px-4 py-2 border rounded bg-gray-50 text-gray-800"
+        required
+      />
+    </div>
+
+    <button type="submit" class="bg-green-500 text-white font-medium px-6 py-2 rounded mt-4 hover:bg-green-600">
+      Upload
+    </button>
+  </form>
+
+  <!-- Image List Container -->
+  <div id="imageList" class="grid grid-cols-3 gap-4 mt-6">
+    <!-- Dynamically loaded images will appear here -->
+  </div>
+</div>
+
+
     <!-- Password Management Section -->
     <div id="password-management" class="section">
       <h2 class="text-2xl font-semibold">Change Password</h2>
@@ -315,11 +352,10 @@
           });
   });
   
-
+  
     // Function to fetch and display images for the selected category
     function loadImages() {
       const category = document.getElementById('category').value;
-      document.getElementById('categoryName').innerText = category.charAt(0).toUpperCase() + category.slice(1);
     
       fetch(`/images/${category}`)
         .then(response => response.json())
@@ -329,21 +365,18 @@
     
           if (data.images && data.images.length > 0) {
             data.images.forEach(image => {
-              const imgElement = document.createElement('div');
-              imgElement.classList.add('product');
-              imgElement.innerHTML = `
-                <div class="product-img">
-                  <img src="${image.path}" alt="${category} Image">
-                </div>
-                <button class="delete-btn bg-red-500 text-white px-4 py-2 mt-2 rounded" data-id="${image._id}">Delete</button>
+              const imageItem = document.createElement('div');
+              imageItem.classList.add('image-item');
+              imageItem.innerHTML = `
+                <img src="${image.path}" alt="Category Image" />
+                <button class="delete-btn" data-id="${image._id}">Delete</button>
               `;
-              imageList.appendChild(imgElement);
-            });
+              imageList.appendChild(imageItem);
     
-            // Add event listener to delete buttons
-            document.querySelectorAll('.delete-btn').forEach(button => {
-              button.addEventListener('click', function () {
-                deleteImage(this.getAttribute('data-id'), category);
+              // Add delete functionality
+              const deleteButton = imageItem.querySelector('.delete-btn');
+              deleteButton.addEventListener('click', () => {
+                deleteImage(image._id, category);
               });
             });
           } else {
@@ -358,32 +391,38 @@
     
     
     
-
-// Function to delete an image
-function deleteImage(imageId, category) {
-  fetch(`/admin/images/${category}/${imageId}`, { method: 'DELETE' })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('Image deleted successfully');
-        loadImages(); // Reload images after deletion
-      } else {
-        alert('Error deleting image');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('Something went wrong');
-    });
-}
-
-
-
-// Load new images when the category is changed
-document.getElementById('category').addEventListener('change', function() {
+    
+    
+    
+    
+  
+  // Function to delete an image
+  function deleteImage(imageId, category) {
+    fetch(`/admin/images/${category}/${imageId}`, { method: 'DELETE' })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Image deleted successfully');
+          loadImages(); // Reload images after deletion
+        } else {
+          alert('Error deleting image');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong');
+      });
+    }
+    
+  
+  
+  
+  
+  // Load new images when the category is changed
+  document.getElementById('category').addEventListener('change', function() {
   loadImages();
-});
-
+  });
+  
     function deleteImage(imageId, category) {
       fetch(`/admin/images/${category}/${imageId}`, { method: 'DELETE' })
         .then(response => response.json())
@@ -406,7 +445,6 @@ document.getElementById('category').addEventListener('change', function() {
     });
     
     
-    
     // Sidebar Navigation
     const sections = document.querySelectorAll('.section');
     const sidebarLinks = document.querySelectorAll('.sidebar a');
@@ -415,26 +453,14 @@ document.getElementById('category').addEventListener('change', function() {
       link.addEventListener('click', event => {
         event.preventDefault();
         const sectionId = event.target.dataset.section;
-    
+
         sections.forEach(section => {
           section.classList.remove('active');
         });
-    
-        const activeSection = document.getElementById(sectionId);
-        activeSection.classList.add('active');
-    
-        // Load form responses when navigating to the form-responses section
-        if (sectionId === 'form-responses') {
-          loadFormResponses();
-        }
+
+        document.getElementById(sectionId).classList.add('active');
       });
     });
-    
-    // Ensure form responses are loaded initially if the section is active
-    if (document.getElementById('form-responses').classList.contains('active')) {
-      loadFormResponses();
-    }
-    
 
     // Logout Functionality
     document.getElementById('logoutBtn').addEventListener('click', function () {
@@ -612,25 +638,8 @@ async function fetchInitialAnalyticsData() {
   }
 }
 
-let todayVisitsChart = null;
-let weekVisitsChart = null;
-let monthVisitsChart = null;
 
-// Function to log a visit when the page loads
-async function logVisit() {
-  try {
-    await fetch('/log-visit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  } catch (error) {
-    console.error('Error logging visit:', error);
-  }
-}
-
-// Function to load and render analytics data
+// Function to load form responses on page load
 async function loadAnalyticsData() {
   try {
     const response = await fetch('/admin/analytics-data');
@@ -642,8 +651,7 @@ async function loadAnalyticsData() {
     document.getElementById('monthTotal').textContent = data.monthlyVisits.reduce((a, b) => a + b, 0);
 
     // Render Today's Visits Graph
-    if (todayVisitsChart) todayVisitsChart.destroy(); // Destroy the existing chart
-    todayVisitsChart = new Chart(document.getElementById('todayVisitsChart').getContext('2d'), {
+    new Chart(document.getElementById('todayVisitsChart').getContext('2d'), {
       type: 'bar',
       data: {
         labels: ['Today'],
@@ -661,8 +669,7 @@ async function loadAnalyticsData() {
     });
 
     // Render This Week's Visits Graph
-    if (weekVisitsChart) weekVisitsChart.destroy(); // Destroy the existing chart
-    weekVisitsChart = new Chart(document.getElementById('weekVisitsChart').getContext('2d'), {
+    new Chart(document.getElementById('weekVisitsChart').getContext('2d'), {
       type: 'line',
       data: {
         labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -681,8 +688,7 @@ async function loadAnalyticsData() {
     });
 
     // Render This Month's Visits Graph
-    if (monthVisitsChart) monthVisitsChart.destroy(); // Destroy the existing chart
-    monthVisitsChart = new Chart(document.getElementById('monthVisitsChart').getContext('2d'), {
+    new Chart(document.getElementById('monthVisitsChart').getContext('2d'), {
       type: 'line',
       data: {
         labels: Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`),
@@ -704,18 +710,24 @@ async function loadAnalyticsData() {
   }
 }
 
-// Initial load on window load
-window.onload = async () => {
-  await logVisit(); // Log visit once when the page loads
-  await loadAnalyticsData(); // Load initial analytics data
-  setInterval(() => loadAnalyticsData(), 5000); // Update analytics data every 5 seconds
 
-  // Initialize the image gallery for the default category
-  loadImages(); // Call loadImages to fetch and display images
+// Consolidated window.onload function
+window.onload = async () => {
+  await loadFormResponses();
+  await loadAnalyticsData();
 };
 
 
 
+
+document.getElementById('imageForm').addEventListener('submit', function (event) {
+  const category = document.getElementById('category').value;
+  if (!category) {
+    event.preventDefault();
+    alert('Please select a category before uploading images.');
+  }
+});
+setInterval(loadAnalyticsData, 5000); // Fetch data every 1 sec
 
 
 
