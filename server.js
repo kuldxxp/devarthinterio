@@ -324,95 +324,8 @@ app.delete('/admin/form-responses/:id', async (req, res) => {
 });
 
 
-app.get('/admin/analytics-data', async (req, res) => {
-  try {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Start of today
 
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay()); // Start of the week (Sunday)
-
-    const startOfMonth = new Date(today);
-    startOfMonth.setDate(1); // Start of the current month
-
-    // Fetch today's visits
-    const todayVisits = await mongoose.connection.collection('visits')
-      .countDocuments({ visitDate: { $gte: today } });
-
-    // Fetch weekly visits
-    const weeklyVisitsCursor = await mongoose.connection.collection('visits')
-      .aggregate([
-        { $match: { visitDate: { $gte: startOfWeek } } },
-        {
-          $group: {
-            _id: { $dayOfWeek: "$visitDate" }, // Group by day of the week
-            count: { $sum: 1 },
-          },
-        },
-      ])
-      .toArray();
-
-    const weeklyVisits = Array(7).fill(0);
-    weeklyVisitsCursor.forEach((day) => {
-      weeklyVisits[day._id - 1] = day.count;
-    });
-
-    // Fetch monthly visits
-    const monthlyVisitsCursor = await mongoose.connection.collection('visits')
-      .aggregate([
-        { $match: { visitDate: { $gte: startOfMonth } } },
-        {
-          $group: {
-            _id: { $dayOfMonth: "$visitDate" }, // Group by day of the month
-            count: { $sum: 1 },
-          },
-        },
-      ])
-      .toArray();
-
-    const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-    const monthlyVisits = Array(daysInMonth).fill(0);
-    monthlyVisitsCursor.forEach((day) => {
-      monthlyVisits[day._id - 1] = day.count;
-    });
-
-    res.json({ todayVisits, weeklyVisits, monthlyVisits });
-  } catch (error) {
-    console.error('Error fetching analytics data:', error);
-    res.status(500).json({ message: 'Error fetching analytics data' });
-  }
-});
-
-app.post('/log-visit', async (req, res) => {
-  try {
-    const visit = {
-      visitDate: new Date(),
-      userIP: req.headers['x-forwarded-for'] || req.connection.remoteAddress, // Log IP address
-    };
-
-    await mongoose.connection.collection('visits').insertOne(visit);
-    res.status(200).json({ message: 'Visit logged successfully' });
-  } catch (error) {
-    console.error('Error logging visit:', error);
-    res.status(500).json({ message: 'Error logging visit' });
-  }
-});
-
-
-const cron = require('node-cron');
-
-// Schedule a job to run on the 1st day of every month at midnight
-cron.schedule('0 0 1 * *', async () => {
-  try {
-    const lastMonth = new Date();
-    lastMonth.setMonth(lastMonth.getMonth() - 1);
-
-    const deleted = await mongoose.connection.collection('visits').deleteMany({ visitDate: { $lt: lastMonth } });
-    console.log(`Old visit data deleted: ${deleted.deletedCount} records`);
-  } catch (error) {
-    console.error('Error during monthly cleanup:', error);
-  }
-});
+ // Import bcrypt for hashing
 
 const bcrypt = require('bcryptjs'); // Required for password hashing and comparison
 
@@ -449,5 +362,4 @@ app.post('/admin/change-password', async (req, res) => {
     res.status(500).json({ success: false, message: 'Error changing password' });
   }
 });
-
 
