@@ -3,12 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
 
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="/assets/css/dashboard.css">
   <style>
-
+    #imageList {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid */
+      gap: 20px; /* Space between grid items */
+      margin-top: 20px; /* Add some spacing above */
+    }
+  
+    /* Individual image item */
+    .image-item {
+      display: flex;
+      flex-direction: column; /* Stack image and button */
+      align-items: center; /* Center content */
+      justify-content: space-between; /* Distribute space evenly */
+      background: #fff; /* White background for contrast */
+      padding: 15px; /* Padding around the item */
+      border-radius: 8px; /* Rounded corners */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      transition: transform 0.2s ease; /* Animation on hover */
+    }
+  
+    /* Image styling */
+    .image-item img {
+      max-width: 100%; /* Make the image responsive */
+      height: auto; /* Maintain aspect ratio */
+      border-radius: 4px; /* Rounded corners */
+      margin-bottom: 10px; /* Space below image */
+    }
+  
+    /* Delete button styling */
+    .image-item .delete-btn {
+      width: 100%; /* Make the button full-width */
+      max-width: 120px; /* Limit button width */
+      padding: 8px 16px;
+      background: #dc3545; /* Red background */
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: center; /* Center text */
+      transition: background 0.2s ease; /* Smooth hover effect */
+    }
+  
+    .image-item .delete-btn:hover {
+      background: #a71d2a; /* Darker red on hover */
+    }
+  
+    /* Hover effect for the image item */
+    .image-item:hover {
+      transform: translateY(-5px); /* Slight upward movement */
+    }
     canvas {
       width: 100% !important; /* Force full width */
       height: auto !important; /* Adjust height based on width */
@@ -44,12 +93,6 @@
     .section {
       margin-bottom: 30px;
     }
-    #analyticsChart {
-      max-width: 600px; /* Limit maximum width */
-      height: 300px; /* Fix height */
-      margin: 0 auto; /* Center the chart */
-    }
-    
     /* Sidebar Styles */
     .sidebar {
       width: 250px;
@@ -163,7 +206,7 @@
     <a href="#" data-section="image-management">Image Management</a>
     <a href="#" data-section="password-management">Change Password</a>
     <a href="#" data-section="form-responses">Form Responses</a>
-    <a href="#" data-section="data-analytics">Data Analytics</a> <!-- Add this line -->
+   
     <button id="logoutBtn" class="bg-red-500 w-full text-center">Logout</button>
   </div>
   
@@ -171,35 +214,52 @@
   <!-- Main Content -->
   <div class="content">
     <!-- Image Management Section -->
-    <div id="image-management" class="section active">
-      <h2 class="text-2xl font-semibold">Image Management</h2>
-      <form id="imageForm" enctype="multipart/form-data">
-        <div class="form-group">
-          <label for="category" class="block text-gray-700">Select Category:</label>
-          <select id="category" name="category" class="w-full px-4 py-2 border rounded">
-            <option value="trophies">Trophies</option>
-            <option value="keychains">Keychains</option>
-            <option value="pens">Pens</option>
-            <option value="diary">Diaries</option>
-            <option value="photoframe">Photo Frames</option>
-            <option value="mugs">Mugs</option>
-            <option value="nameplates">Name Plates</option>
-            <option value="housenameplates">House Name Plates</option>
-            <option value="memento">Mementos</option>
-            <option value="bottle">Bottles</option>
-            <option value="uv">UV DTF Stickers</option>
-            <option value="neon">Neon Lights</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="images" class="block text-gray-700">Upload Images:</label>
-          <input type="file" id="images" name="images" accept="image/*" multiple class="w-full px-4 py-2 border rounded">
-        </div>
-
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Upload</button>
-      </form>
+<div id="image-management" class="section active">
+  <h2 class="text-2xl font-semibold">Image Management</h2>
+  <form id="imageForm" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="category" class="block text-gray-700 font-medium">Select Category:</label>
+      <select id="category" name="category" class="w-full px-4 py-2 border rounded bg-white text-gray-800" required>
+        <option value="" disabled selected>Select a category</option> <!-- Placeholder -->
+        <option value="trophies">Trophies</option>
+        <option value="keychains">Keychains</option>
+        <option value="pens">Pens</option>
+        <option value="diary">Diaries</option>
+        <option value="photoframe">Photo Frames</option>
+        <option value="mugs">Mugs</option>
+        <option value="nameplates">Name Plates</option>
+        <option value="housenameplates">House Name Plates</option>
+        <option value="memento">Mementos</option>
+        <option value="bottle">Bottles</option>
+        <option value="uv">UV DTF Stickers</option>
+        <option value="neon">Neon Lights</option>
+      </select>
     </div>
+
+    <div class="form-group">
+      <label for="images" class="block text-gray-700 font-medium mt-4">Upload Images:</label>
+      <input
+        type="file"
+        id="images"
+        name="images"
+        accept="image/*"
+        multiple
+        class="w-full px-4 py-2 border rounded bg-gray-50 text-gray-800"
+        required
+      />
+    </div>
+
+    <button type="submit" class="bg-green-500 text-white font-medium px-6 py-2 rounded mt-4 hover:bg-green-600">
+      Upload
+    </button>
+  </form>
+
+  <!-- Image List Container -->
+  <div id="imageList" class="grid grid-cols-3 gap-4 mt-6">
+    <!-- Dynamically loaded images will appear here -->
+  </div>
+</div>
+
 
     <!-- Password Management Section -->
     <div id="password-management" class="section">
@@ -242,37 +302,157 @@
     </div>
   </div>
 
-<!-- Data Analytics Section -->
-<div id="data-analytics" class="section">
-  <h2 class="text-2xl font-semibold">Data Analytics</h2>
-
-  <!-- Today's Visits -->
-  <div class="chart-container" style="border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-    <h3>Today's Visits</h3>
-    <p>Total Visits Today: <span id="todayTotal">0</span></p>
-    <canvas id="todayVisitsChart"></canvas>
-  </div>
-
-  <!-- This Week's Visits -->
-  <div class="chart-container" style="border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-    <h3>This Week's Visits</h3>
-    <p>Total Visits This Week: <span id="weekTotal">0</span></p>
-    <canvas id="weekVisitsChart"></canvas>
-  </div>
-
-  <!-- This Month's Visits -->
-  <div class="chart-container" style="border: 1px solid #ccc; border-radius: 8px; padding: 20px;">
-    <h3>This Month's Visits</h3>
-    <p>Total Visits This Month: <span id="monthTotal">0</span></p>
-    <canvas id="monthVisitsChart"></canvas>
-  </div>
-</div>
-
-
-
-
+  
 
   <script>
+    document.getElementById('imageForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+  
+      fetch('/admin/upload-images', {
+          method: 'POST',
+          body: formData,
+      })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  alert('Images uploaded successfully');
+                  loadImages(); // Reload the gallery
+              } else {
+                  alert('Error uploading images');
+              }
+          })
+          .catch(error => {
+              console.error('Error uploading images:', error);
+              alert('Something went wrong');
+          });
+  });
+  
+  
+    // Function to fetch and display images for the selected category
+    function loadImages() {
+      const category = document.getElementById('category').value;
+    
+      fetch(`/images/${category}`)
+        .then(response => response.json())
+        .then(data => {
+          const imageList = document.getElementById('imageList');
+          imageList.innerHTML = ''; // Clear existing images
+    
+          if (data.images && data.images.length > 0) {
+            data.images.forEach(image => {
+              const imageItem = document.createElement('div');
+              imageItem.classList.add('image-item');
+              imageItem.innerHTML = `
+                <img src="${image.path}" alt="Category Image" />
+                <button class="delete-btn" data-id="${image._id}">Delete</button>
+              `;
+              imageList.appendChild(imageItem);
+    
+              // Add delete functionality
+              const deleteButton = imageItem.querySelector('.delete-btn');
+              deleteButton.addEventListener('click', () => {
+                deleteImage(image._id, category);
+              });
+            });
+          } else {
+            imageList.innerHTML = '<p>No images found for this category.</p>';
+          }
+        })
+        .catch(error => {
+          console.error('Error loading images:', error);
+        });
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+  
+  // Function to delete an image
+  function deleteImage(imageId, category) {
+    fetch(`/admin/images/${category}/${imageId}`, { method: 'DELETE' })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Image deleted successfully');
+          loadImages(); // Reload images after deletion
+        } else {
+          alert('Error deleting image');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong');
+      });
+    }
+    
+    document.getElementById('passwordForm').addEventListener('submit', async function (event) {
+      event.preventDefault(); // Prevent default form submission
+    
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+    
+      if (newPassword !== confirmPassword) {
+        alert('New passwords do not match');
+        return;
+      }
+    
+      try {
+        const response = await fetch('/admin/change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
+        });
+    
+        const data = await response.json();
+    
+        if (data.success) {
+          alert('Password changed successfully');
+          document.getElementById('passwordForm').reset();
+        } else {
+          alert(data.message);
+        }
+      } catch (error) {
+        console.error('Error changing password:', error);
+        alert('Something went wrong. Please try again.');
+      }
+    });
+    
+  
+  
+  
+  // Load new images when the category is changed
+  document.getElementById('category').addEventListener('change', function() {
+  loadImages();
+  });
+  
+    function deleteImage(imageId, category) {
+      fetch(`/admin/images/${category}/${imageId}`, { method: 'DELETE' })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Image deleted successfully');
+            loadImages(); // Reload images
+          } else {
+            alert('Error deleting image');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Something went wrong');
+        });
+    }
+    
+    document.getElementById('category').addEventListener('change', function() {
+      loadImages();
+    });
+    
+    
     // Sidebar Navigation
     const sections = document.querySelectorAll('.section');
     const sidebarLinks = document.querySelectorAll('.sidebar a');
@@ -298,262 +478,170 @@
     });
 
     // Load Form Responses
-    async function loadFormResponses() {
-      const formList = document.getElementById('formList');
-      formList.innerHTML = '<p>Loading form responses...</p>'; // Loading indicator
-  
-      try {
-        const response = await fetch('/admin/form-responses');
-        if (!response.ok) {
-          throw new Error(`Failed to fetch form responses: ${response.statusText}`);
-        }
-  
-        const data = await response.json();
-        formList.innerHTML = ''; // Clear existing items after loading
-  
-        if (data.length === 0) {
-          formList.innerHTML = '<p>No form responses found.</p>';
-          return;
-        }
-  
-        data.forEach(form => {
-          const formItem = document.createElement('div');
-          formItem.classList.add('form-item');
-          formItem.innerHTML = `
-            <div>
-              <p><strong>${form.fullName}</strong> (${new Date(form.submittedAt).toLocaleString()})</p>
-              <p><em>${form.category}</em></p>
-            </div>
-            <div>
-              <button class="view-btn" onclick="viewFormDetails('${form._id}')">View</button>
-              <button class="delete-btn" onclick="deleteFormResponse('${form._id}')">Delete</button>
-            </div>
-          `;
-          formList.appendChild(formItem);
-        });
-      } catch (error) {
-        console.error('Error loading form responses:', error);
-        formList.innerHTML = `<p class="error">Error loading form responses: ${error.message}</p>`;
-      }
+    // Load Form Responses
+async function loadFormResponses() {
+  const formList = document.getElementById('formList');
+  formList.innerHTML = '<p>Loading form responses...</p>'; // Loading indicator
+
+  try {
+    const response = await fetch('/admin/form-responses');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch form responses: ${response.statusText}`);
     }
-  
-    async function viewFormDetails(id) {
-      const modal = document.getElementById('formDetailsModal');
-      const content = document.getElementById('formDetailsContent');
-      content.innerHTML = '<p>Loading details...</p>';
-      modal.classList.add('active');
-    
-      try {
-        const response = await fetch(`/admin/form-responses/${id}`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch form details: ${response.statusText}`);
-        }
-    
-        const data = await response.json();
-        content.innerHTML = `
-          <p><strong>Name:</strong> ${data.fullName}</p>
-          <p><strong>Email:</strong> ${data.email}</p>
-          <p><strong>Phone:</strong> ${data.phoneNumber}</p>
-          <p><strong>Address:</strong> 
-            ${data.address.street}, 
-            ${data.address.city}, 
-            ${data.address.region}, 
-            ${data.address.postalCode}
-          </p>
-          <p><strong>Category:</strong> ${data.category}</p>
-          <p><strong>Submitted At:</strong> ${new Date(data.submittedAt).toLocaleString()}</p>
-          <div><strong>Images:</strong></div>
-          <div id="imageGallery" style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
-            ${
-              data.photos.length > 0
-                ? data.photos
-                    .map(photo => `
-                      <img 
-                        src="${photo}" 
-                        onclick="zoomImage('${photo}')"
-                        alt="Photo" 
-                        style="max-width: 100%; cursor: pointer; margin-bottom: 10px;">
-                    `)
-                    .join('')
-                : '<p>No images available.</p>'
-            }
-          </div>
-        `;
-      } catch (error) {
-        console.error('Error loading form details:', error);
-        content.innerHTML = `<p class="error">Error loading form details: ${error.message}</p>`;
-      }
+
+    const data = await response.json();
+    formList.innerHTML = ''; // Clear existing items after loading
+
+    if (data.length === 0) {
+      formList.innerHTML = '<p>No form responses found.</p>';
+      return;
     }
-    
-    // Zoom Image Functionality
-    function zoomImage(url) {
-      const zoomModal = document.createElement('div');
-      zoomModal.style.position = 'fixed';
-      zoomModal.style.top = '0';
-      zoomModal.style.left = '0';
-      zoomModal.style.width = '100%';
-      zoomModal.style.height = '100%';
-      zoomModal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-      zoomModal.style.display = 'flex';
-      zoomModal.style.justifyContent = 'center';
-      zoomModal.style.alignItems = 'center';
-      zoomModal.style.zIndex = '1000';
-    
-      const zoomedImage = document.createElement('img');
-      zoomedImage.src = url;
-      zoomedImage.style.maxWidth = '90%';
-      zoomedImage.style.maxHeight = '90%';
-      zoomedImage.style.border = '2px solid #fff';
-      zoomedImage.style.borderRadius = '10px';
-    
-      const closeButton = document.createElement('button');
-      closeButton.textContent = 'Close';
-      closeButton.style.position = 'absolute';
-      closeButton.style.top = '20px';
-      closeButton.style.right = '20px';
-      closeButton.style.backgroundColor = '#ff4d4d';
-      closeButton.style.color = '#fff';
-      closeButton.style.border = 'none';
-      closeButton.style.padding = '10px 20px';
-      closeButton.style.cursor = 'pointer';
-      closeButton.style.fontSize = '16px';
-    
-      closeButton.onclick = () => {
-        document.body.removeChild(zoomModal);
-      };
-    
-      zoomModal.appendChild(zoomedImage);
-      zoomModal.appendChild(closeButton);
-      document.body.appendChild(zoomModal);
-    }
-    
-    // Close Modal
-    document.getElementById('closeModal').addEventListener('click', () => {
-      document.getElementById('formDetailsModal').classList.remove('active');
+
+    data.forEach((form) => {
+      const formItem = document.createElement('div');
+      formItem.classList.add('form-item');
+      formItem.innerHTML = `
+        <div>
+          <p><strong>${form.fullName}</strong> (${new Date(form.submittedAt).toLocaleString()})</p>
+          <p><em>${form.category}</em></p>
+        </div>
+        <div>
+          <button class="view-btn" onclick="viewFormDetails('${form._id}')">View</button>
+          <button class="delete-btn" onclick="deleteFormResponse('${form._id}')">Delete</button>
+        </div>
+      `;
+      formList.appendChild(formItem);
     });
-  
-    // Delete Form Response
-   // Function to delete a form response
+  } catch (error) {
+    console.error('Error loading form responses:', error);
+    formList.innerHTML = `<p class="error">Error loading form responses: ${error.message}</p>`;
+  }
+}
+
+// View Form Details
+async function viewFormDetails(id) {
+  const modal = document.getElementById('formDetailsModal');
+  const content = document.getElementById('formDetailsContent');
+  content.innerHTML = '<p>Loading details...</p>';
+  modal.classList.add('active');
+
+  try {
+    const response = await fetch(`/admin/form-responses/${id}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch form details: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    content.innerHTML = `
+      <p><strong>Name:</strong> ${data.fullName}</p>
+      <p><strong>Email:</strong> ${data.email}</p>
+      <p><strong>Phone:</strong> ${data.phoneNumber}</p>
+      <p><strong>Address:</strong> 
+        ${data.address.street}, 
+        ${data.address.city}, 
+        ${data.address.region}, 
+        ${data.address.postalCode}
+      </p>
+      <p><strong>Category:</strong> ${data.category}</p>
+      <p><strong>Submitted At:</strong> ${new Date(data.submittedAt).toLocaleString()}</p>
+      <div><strong>Images:</strong></div>
+      <div id="imageGallery" style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
+        ${
+          data.photos.length > 0
+            ? data.photos
+                .map(
+                  (photo) => `
+                  <img 
+                    src="${photo}" 
+                    onclick="zoomImage('${photo}')"
+                    alt="Photo" 
+                    style="max-width: 100%; cursor: pointer; margin-bottom: 10px;">
+                `
+                )
+                .join('')
+            : '<p>No images available.</p>'
+        }
+      </div>
+    `;
+  } catch (error) {
+    console.error('Error loading form details:', error);
+    content.innerHTML = `<p class="error">Error loading form details: ${error.message}</p>`;
+  }
+}
+document.getElementById('closeModal').addEventListener('click', () => {
+  document.getElementById('formDetailsModal').classList.remove('active'); // Hides the modal
+});
+
+// Delete Form Response
 async function deleteFormResponse(id) {
   if (!confirm('Are you sure you want to delete this form response?')) return;
 
   try {
-    // Send DELETE request to the server
     const response = await fetch(`/admin/form-responses/${id}`, { method: 'DELETE' });
     if (!response.ok) {
       throw new Error(`Failed to delete form response: ${response.statusText}`);
     }
 
-    // Show success message and refresh the list
     alert('Form response deleted successfully');
-    loadFormResponses(); // Refresh the form responses
+    loadFormResponses(); // Refresh the list
   } catch (error) {
-    // Handle errors during the delete operation
     console.error('Error deleting form response:', error);
     alert(`Error deleting form response: ${error.message}`);
   }
 }
-async function fetchInitialAnalyticsData() {
-  try {
-    const response = await fetch('/admin/analytics-data');
-    if (!response.ok) {
-      throw new Error(`Failed to fetch initial analytics data: ${response.statusText}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching initial analytics data:', error);
-    return null;
-  }
+
+// Zoom Image Functionality
+function zoomImage(url) {
+  const zoomModal = document.createElement('div');
+  zoomModal.style.position = 'fixed';
+  zoomModal.style.top = '0';
+  zoomModal.style.left = '0';
+  zoomModal.style.width = '100%';
+  zoomModal.style.height = '100%';
+  zoomModal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+  zoomModal.style.display = 'flex';
+  zoomModal.style.justifyContent = 'center';
+  zoomModal.style.alignItems = 'center';
+  zoomModal.style.zIndex = '1000';
+
+  const zoomedImage = document.createElement('img');
+  zoomedImage.src = url;
+  zoomedImage.style.maxWidth = '90%';
+  zoomedImage.style.maxHeight = '90%';
+  zoomedImage.style.border = '2px solid #fff';
+  zoomedImage.style.borderRadius = '10px';
+
+  const closeButton = document.createElement('button');
+  closeButton.textContent = 'Close';
+  closeButton.style.position = 'absolute';
+  closeButton.style.top = '20px';
+  closeButton.style.right = '20px';
+  closeButton.style.backgroundColor = '#ff4d4d';
+  closeButton.style.color = '#fff';
+  closeButton.style.border = 'none';
+  closeButton.style.padding = '10px 20px';
+  closeButton.style.cursor = 'pointer';
+  closeButton.style.fontSize = '16px';
+
+  closeButton.onclick = () => {
+    document.body.removeChild(zoomModal);
+  };
+
+  zoomModal.appendChild(zoomedImage);
+  zoomModal.appendChild(closeButton);
+  document.body.appendChild(zoomModal);
 }
 
-
-// Function to load form responses on page load
-async function loadAnalyticsData() {
-  try {
-    const response = await fetch('/admin/analytics-data');
-    const data = await response.json();
-
-    // Update totals
-    document.getElementById('todayTotal').textContent = data.todayVisits;
-    document.getElementById('weekTotal').textContent = data.weeklyVisits.reduce((a, b) => a + b, 0);
-    document.getElementById('monthTotal').textContent = data.monthlyVisits.reduce((a, b) => a + b, 0);
-
-    // Render Today's Visits Graph
-    new Chart(document.getElementById('todayVisitsChart').getContext('2d'), {
-      type: 'bar',
-      data: {
-        labels: ['Today'],
-        datasets: [
-          {
-            label: 'Visits',
-            data: [data.todayVisits],
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: { responsive: true },
-    });
-
-    // Render This Week's Visits Graph
-    new Chart(document.getElementById('weekVisitsChart').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        datasets: [
-          {
-            label: 'Visits',
-            data: data.weeklyVisits,
-            backgroundColor: 'rgba(153, 102, 255, 0.2)',
-            borderColor: 'rgba(153, 102, 255, 1)',
-            borderWidth: 1,
-            fill: true,
-          },
-        ],
-      },
-      options: { responsive: true },
-    });
-
-    // Render This Month's Visits Graph
-    new Chart(document.getElementById('monthVisitsChart').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`),
-        datasets: [
-          {
-            label: 'Visits',
-            data: data.monthlyVisits,
-            backgroundColor: 'rgba(255, 159, 64, 0.2)',
-            borderColor: 'rgba(255, 159, 64, 1)',
-            borderWidth: 1,
-            fill: true,
-          },
-        ],
-      },
-      options: { responsive: true },
-    });
-  } catch (error) {
-    console.error('Error loading analytics data:', error);
+document.getElementById('imageForm').addEventListener('submit', function (event) {
+  const category = document.getElementById('category').value;
+  if (!category) {
+    event.preventDefault();
+    alert('Please select a category before uploading images.');
   }
-}
+});
 
-// Consolidated window.onload function
-window.onload = () => {
-  // Log a visit when the page loads
-  fetch('/log-visit', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .catch((error) => {
-      console.error('Error logging visit:', error);
-    })
-    .finally(() => {
-      // Load analytics data after logging the visit
-      loadAnalyticsData();
-    });
+window.onload = async () => {
+  await loadFormResponses();
 };
 
 
@@ -561,3 +649,5 @@ window.onload = () => {
   </script>
 </body>
 </html>
+
+

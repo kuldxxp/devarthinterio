@@ -113,3 +113,55 @@ body{
   background: var(--bg-hvr);
   color: var(--white);
 }
+
+@media (max-width: 767px) {
+  body {
+    font-size: 1.4rem; /* Set a base font size for readability */
+    line-height: 1.5; /* Improve text spacing */
+  }
+
+  .wrapper {
+    padding: 10px; /* Add padding for smaller screens */
+  }
+
+  .terms_service {
+    width: 95%; /* Adjust to nearly full width */
+    height: auto; /* Allow height to adjust to content */
+    margin: 20px auto; /* Center the container with reduced margin */
+    padding: 10px; /* Add inner padding for spacing */
+    box-shadow: none; /* Optional: Remove shadow for a cleaner look */
+  }
+
+  .terms_service .tc_head {
+    height: auto; /* Allow dynamic height for smaller screens */
+    padding: 10px; /* Reduce padding */
+    text-align: center; /* Center-align content */
+  }
+
+  .terms_service .tc_body {
+    padding: 10px; /* Add padding for better spacing */
+    height: auto; /* Remove fixed height to allow content to flow */
+    overflow: visible; /* Prevent content clipping */
+  }
+
+  .terms_service .tc_body pre {
+    font-size: 1.3rem; /* Reduce font size for compactness */
+    line-height: 1.4; /* Adjust line height */
+    word-wrap: break-word; /* Ensure long text breaks properly */
+    white-space: pre-wrap; /* Maintain preformatted structure */
+  }
+
+  .terms_service .icon {
+    width: 40px; /* Reduce icon size */
+    height: 40px;
+    font-size: 16px; /* Adjust icon font size */
+  }
+
+  .terms_service .tc_head h2 {
+    font-size: 1.6rem; /* Reduce heading size */
+  }
+
+  .terms_service .tc_head p {
+    font-size: 1.2rem; /* Adjust paragraph font size */
+  }
+}

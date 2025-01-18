@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
+
+body{
+   background: #00001e;
+}
+
+.box{
+   width: 320px;
+   margin: 100px auto;
+   background: #fff;
+   border-radius: 7px;
+   box-shadow: 1px 2px 4px rgba(0,0,0,.3);
+}
+
+.box .heading{
+   background: #5dcad1;
+   border-radius: 7px 7px 0px 0px;
+   padding: 10px;
+   color: #fff;
+   text-align: center;
+   font-family: "Rubik";
+}
+
+.faqs{
+   padding: 0px 20px 20px;
+}
+
+::-webkit-details-marker{
+   float: right;
+   margin-top: 3px;
+}
+
+details{
+   background: #f6f6f6;
+   padding: 10px 20px;
+   border-radius: 7px;
+   margin-top: 20px;
+   font-family: "Rubik";
+   font-size: 14px;
+   letter-spacing: 1px;
+   cursor: pointer;
+}
+
+details summary{
+   outline: none;
+}
+
+@media (max-width: 767px) {
+    body {
+      font-size: 1.4rem !important; /* Slightly smaller font size */
+      line-height: 1.4 !important; /* Adjust line height accordingly */
+    }
+  
+    .box {
+      width: 95% !important; /* Increase width slightly for more space */
+      margin: 30px auto !important; /* Reduce top margin */
+      padding: 10px 5px !important; /* Slightly reduce padding */
+    }
+  
+    .box .heading {
+      font-size: 1.6rem !important; /* Decrease font size */
+      padding: 12px !important; /* Adjust padding for better proportion */
+    }
+  
+    .faqs {
+      padding: 8px 10px !important; /* Reduce inner padding */
+    }
+  
+    details {
+      font-size: 1.4rem !important; /* Smaller font size for details */
+      padding: 10px !important; /* Adjust padding for touch targets */
+      margin-top: 10px !important; /* Decrease spacing between items */
+    }
+  
+    details summary {
+      font-size: 1.4rem !important; /* Match summary font size */
+    }
+  }
+  

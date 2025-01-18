@@ -216,29 +216,29 @@ app.get('/images/:category', async (req, res) => {
 const adminRoutes = require('./routes/admin');
 app.use('/admin', adminRoutes);
 
-// Admin image delete functionality
-// app.delete('/admin/images/:category/:id', async (req, res) => {
-//   const { category, id } = req.params;
+//Admin image delete functionality
+app.delete('/admin/images/:category/:id', async (req, res) => {
+  const { category, id } = req.params;
 
-//   try {
-//     // Find the image by ID
-//     const image = await Image.findById(id);
-//     if (!image) {
-//       return res.status(404).json({ success: false, message: 'Image not found' });
-//     }
+  try {
+    // Find the image by ID
+    const image = await Image.findById(id);
+    if (!image) {
+      return res.status(404).json({ success: false, message: 'Image not found' });
+    }
 
-//     // Delete the image from Cloudinary
-//     await cloudinary.uploader.destroy(image.filename);  // Use Cloudinary public ID
+    // Delete the image from Cloudinary
+    await cloudinary.uploader.destroy(image.filename);  // Use Cloudinary public ID
 
-//     // Delete the image record from MongoDB
-//     await Image.findByIdAndDelete(id);
+    // Delete the image record from MongoDB
+    await Image.findByIdAndDelete(id);
 
-//     res.json({ success: true, message: 'Image deleted successfully' });
-//   } catch (error) {
-//     console.error('Error deleting image:', error);
-//     res.status(500).json({ success: false, message: 'Error deleting image' });
-//   }
-// });
+    res.json({ success: true, message: 'Image deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting image:', error);
+    res.status(500).json({ success: false, message: 'Error deleting image' });
+  }
+});
 app.delete('/admin/form-responses/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -324,92 +324,42 @@ app.delete('/admin/form-responses/:id', async (req, res) => {
 });
 
 
-app.get('/admin/analytics-data', async (req, res) => {
+
+ // Import bcrypt for hashing
+
+const bcrypt = require('bcryptjs'); // Required for password hashing and comparison
+
+app.post('/admin/change-password', async (req, res) => {
+  const { currentPassword, newPassword, confirmPassword } = req.body;
+
+  // Ensure new passwords match
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ success: false, message: 'New passwords do not match' });
+  }
+
   try {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Start of today
+    // Fetch the admin user
+    const admin = await Admin.findOne(); // Assuming a single admin user
+    if (!admin) {
+      return res.status(404).json({ success: false, message: 'Admin user not found' });
+    }
 
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay()); // Start of the week (Sunday)
+    // Validate current password
+    const isMatch = await bcrypt.compare(currentPassword, admin.password);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: 'Current password is incorrect' });
+    }
 
-    const startOfMonth = new Date(today);
-    startOfMonth.setDate(1); // Start of the current month
+    // Hash the new password and update it
+    const salt = await bcrypt.genSalt(10);
+    admin.password = await bcrypt.hash(newPassword, salt);
 
-    // Fetch today's visits
-    const todayVisits = await mongoose.connection.collection('visits')
-      .countDocuments({ visitDate: { $gte: today } });
+    await admin.save();
 
-    // Fetch weekly visits
-    const weeklyVisitsCursor = await mongoose.connection.collection('visits')
-      .aggregate([
-        { $match: { visitDate: { $gte: startOfWeek } } },
-        {
-          $group: {
-            _id: { $dayOfWeek: "$visitDate" }, // Group by day of the week
-            count: { $sum: 1 },
-          },
-        },
-      ])
-      .toArray();
-
-    const weeklyVisits = Array(7).fill(0);
-    weeklyVisitsCursor.forEach((day) => {
-      weeklyVisits[day._id - 1] = day.count;
-    });
-
-    // Fetch monthly visits
-    const monthlyVisitsCursor = await mongoose.connection.collection('visits')
-      .aggregate([
-        { $match: { visitDate: { $gte: startOfMonth } } },
-        {
-          $group: {
-            _id: { $dayOfMonth: "$visitDate" }, // Group by day of the month
-            count: { $sum: 1 },
-          },
-        },
-      ])
-      .toArray();
-
-    const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-    const monthlyVisits = Array(daysInMonth).fill(0);
-    monthlyVisitsCursor.forEach((day) => {
-      monthlyVisits[day._id - 1] = day.count;
-    });
-
-    res.json({ todayVisits, weeklyVisits, monthlyVisits });
+    res.json({ success: true, message: 'Password changed successfully' });
   } catch (error) {
-    console.error('Error fetching analytics data:', error);
-    res.status(500).json({ message: 'Error fetching analytics data' });
+    console.error('Error changing password:', error);
+    res.status(500).json({ success: false, message: 'Error changing password' });
   }
 });
 
-app.post('/log-visit', async (req, res) => {
-  try {
-    const visit = {
-      visitDate: new Date(),
-      userIP: req.headers['x-forwarded-for'] || req.connection.remoteAddress, // Log IP address
-    };
-
-    await mongoose.connection.collection('visits').insertOne(visit);
-    res.status(200).json({ message: 'Visit logged successfully' });
-  } catch (error) {
-    console.error('Error logging visit:', error);
-    res.status(500).json({ message: 'Error logging visit' });
-  }
-});
-
-
-const cron = require('node-cron');
-
-// Schedule a job to run on the 1st day of every month at midnight
-cron.schedule('0 0 1 * *', async () => {
-  try {
-    const lastMonth = new Date();
-    lastMonth.setMonth(lastMonth.getMonth() - 1);
-
-    const deleted = await mongoose.connection.collection('visits').deleteMany({ visitDate: { $lt: lastMonth } });
-    console.log(`Old visit data deleted: ${deleted.deletedCount} records`);
-  } catch (error) {
-    console.error('Error during monthly cleanup:', error);
-  }
-});
