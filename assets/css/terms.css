@@ -165,3 +165,64 @@ body{
     font-size: 1.2rem; /* Adjust paragraph font size */
   }
 }
+
+@media (max-width: 767px) {
+  body {
+    font-size: 1.2rem; /* Reduce font size slightly for compactness */
+    line-height: 1.4; /* Improve readability */
+  }
+
+  .wrapper {
+    padding: 10px; /* Add padding around the container */
+    overflow-y: auto; /* Ensure the entire wrapper scrolls on mobile */
+  }
+
+  .terms_service {
+    width: 95%; /* Use a percentage for responsive width */
+    max-width: 100%; /* Ensure it doesn't exceed screen width */
+    margin: 20px auto; /* Center the container */
+    padding: 10px; /* Add some inner padding */
+    height: auto; /* Let height adjust dynamically */
+    box-shadow: none; /* Optional: Remove shadow for simplicity */
+  }
+
+  .terms_service .tc_head {
+    height: auto; /* Allow flexible height */
+    padding: 10px; /* Add padding for better spacing */
+    text-align: center; /* Center-align content */
+  }
+
+  .terms_service .tc_body {
+    height: auto; /* Allow the body to grow dynamically */
+    overflow-y: visible; /* Let the content flow without clipping */
+    padding: 10px; /* Add spacing around text */
+  }
+
+  .terms_service .tc_body ol li {
+    margin-bottom: 10px; /* Adjust spacing for smaller screens */
+  }
+
+  .terms_service .tc_body ol li h3 {
+    font-size: 1.3rem; /* Reduce heading size slightly */
+    margin-bottom: 5px;
+  }
+
+  .terms_service .tc_body p {
+    font-size: 1.2rem; /* Reduce paragraph font size */
+    line-height: 1.4; /* Ensure readability */
+  }
+
+  .terms_service .icon {
+    width: 35px; /* Reduce icon size for mobile */
+    height: 35px;
+    font-size: 14px; /* Adjust font size */
+  }
+
+  .terms_service .tc_head h2 {
+    font-size: 1.5rem; /* Shrink heading for compact layout */
+  }
+
+  .terms_service .tc_head p {
+    font-size: 1.1rem; /* Adjust font size for the date */
+  }
+}
