@@ -505,6 +505,7 @@ body {
 
 .hero .play-btn {
   display: none;
+  position: relative;
 }
 
 .hero {
@@ -540,6 +541,14 @@ body {
   position: relative;
 }
 
+/*@media (max-width: 767px) {*/
+/*  .hero-banner {*/
+/*    margin-top: 30px; !* Adjust this value to position it lower *!*/
+/*    position: relative;*/
+/*    top: 20px; !* Add vertical spacing for better layout *!*/
+/*  }*/
+/*}*/
+
 .hero-banner img {
   max-width: 100%;
   height: auto;
@@ -547,15 +556,15 @@ body {
   margin: 0 auto;
 }
 
-.banner-1 {
-  margin-bottom: 0px;
-}
+/*.banner-1 {*/
+/*  margin-bottom: 0px;*/
+/*}*/
 
-.banner-2 {
-  margin-top: -5px;
-  position: relative;
-  top: -70px;
-}
+/*.banner-2 {*/
+/*  margin-top: -5px;*/
+/*  position: relative;*/
+/*  top: -70px;*/
+/*}*/
 
 /* .hero-banner {
   max-width: 475px;
@@ -1321,7 +1330,6 @@ body {
   border-radius: 8px;
 }
 
-
 .suggestions li {
   padding: 10px;
   cursor: pointer;
@@ -1445,3 +1453,30 @@ body {
     font-size: 2rem; /* Ensure a readable size on smaller screens */
   }
 }
+
+@media (max-width: 767px) {
+  .dropdown-menu {
+    grid-template-columns: repeat(3, 1fr); /* Adjust to 3 columns */
+    gap: 10px; /* Maintain spacing between items */
+  }
+
+  .dropdown-menu li a {
+    font-size: 1.4rem; /* Adjust font size for mobile readability */
+  }
+}
+
+
+@media (min-width: 768px) {
+  .map-container iframe {
+    width: 130%; /* Increase the width by 30% on desktop */
+    margin-left: -15%; /* Center the map by adjusting the left margin */
+  }
+}
+
+/*@media (max-width: 767px) {*/
+/*  .card-action .action-btn {*/
+/*    display: none; !* Hide the quick view button on mobile *!*/
+/*  }*/
+/*}*/
+
+
