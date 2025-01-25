@@ -505,6 +505,7 @@ body {
 
 .hero .play-btn {
   display: none;
+  position: relative;
 }
 
 .hero {
@@ -540,6 +541,14 @@ body {
   position: relative;
 }
 
+/*@media (max-width: 767px) {*/
+/*  .hero-banner {*/
+/*    margin-top: 30px; !* Adjust this value to position it lower *!*/
+/*    position: relative;*/
+/*    top: 20px; !* Add vertical spacing for better layout *!*/
+/*  }*/
+/*}*/
+
 .hero-banner img {
   max-width: 100%;
   height: auto;
@@ -547,15 +556,15 @@ body {
   margin: 0 auto;
 }
 
-.banner-1 {
-  margin-bottom: 0px;
-}
+/*.banner-1 {*/
+/*  margin-bottom: 0px;*/
+/*}*/
 
-.banner-2 {
-  margin-top: -5px;
-  position: relative;
-  top: -70px;
-}
+/*.banner-2 {*/
+/*  margin-top: -5px;*/
+/*  position: relative;*/
+/*  top: -70px;*/
+/*}*/
 
 /* .hero-banner {
   max-width: 475px;
@@ -1117,6 +1126,7 @@ body {
 
   .hero {
     padding-block-start: 250px;
+    overflow: visible !important;
   }
 
   .hero-banner {
@@ -1320,7 +1330,6 @@ body {
   border-radius: 8px;
 }
 
-
 .suggestions li {
   padding: 10px;
   cursor: pointer;
@@ -1330,5 +1339,144 @@ body {
   background-color: #182b47;
 }
 
+
+@media (max-width: 767px) {
+  .header-bottom {
+    position: fixed;
+    top: 0;
+    left: -260px; /* Off-screen on the left */
+    max-width: 260px;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--xiketic);
+    padding: 30px 20px;
+    z-index: 1;
+    transition: transform 0.3s ease-in-out; /* Smooth slide animation */
+    opacity: 0; /* Ensure hidden state is consistent */
+    visibility: hidden;
+  }
+
+  .header-bottom.active {
+    transform: translateX(260px); /* Slide menu into view */
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--eerie-black_70);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease; /* Smooth overlay fade-in */
+  }
+
+  .overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .nav-open-btn {
+    display: block;
+  }
+
+  .nav-close-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px; /* Position close button */
+    background-color: var(--white-1);
+    color: var(--xiketic);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    z-index: 1000;
+    transition: color 0.3s ease, background-color 0.3s ease;
+  }
+
+  .nav-close-btn:hover {
+    background-color: var(--maximum-blue-green);
+    color: var(--white-1);
+  }
+
+  .navbar-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-bottom {
+    visibility: visible;
+    transform: none;
+    position: relative;
+    flex-direction: row;
+    height: auto;
+    padding: 0;
+  }
+
+  .nav-open-btn,
+  .nav-close-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-title {
+    display: block; /* Ensure visibility */
+    font-size: 2rem; /* Adjust for smaller screens */
+    line-height: 1.2; /* Improve readability */
+    text-align: center; /* Center-align for mobile */
+    padding: 10px; /* Add padding for better spacing */
+    color: var(--white-1);
+  }
+
+  .hero-content {
+    padding: 15px;
+    overflow: visible !important; /* Optional: Add padding to the content area */
+  }
+
+  .hero {
+    padding-block-start: 50px; /* Adjust padding for the hero section on mobile */
+  }
+}
+
+@media (max-width: 767px) {
+  .h1 {
+    font-size: 2rem; /* Ensure a readable size on smaller screens */
+  }
+}
+
+@media (max-width: 767px) {
+  .dropdown-menu {
+    grid-template-columns: repeat(3, 1fr); /* Adjust to 3 columns */
+    gap: 10px; /* Maintain spacing between items */
+  }
+
+  .dropdown-menu li a {
+    font-size: 1.4rem; /* Adjust font size for mobile readability */
+  }
+}
+
+
+@media (min-width: 768px) {
+  .map-container iframe {
+    width: 130%; /* Increase the width by 30% on desktop */
+    margin-left: -15%; /* Center the map by adjusting the left margin */
+  }
+}
+
+/*@media (max-width: 767px) {*/
+/*  .card-action .action-btn {*/
+/*    display: none; !* Hide the quick view button on mobile *!*/
+/*  }*/
+/*}*/
 
 
