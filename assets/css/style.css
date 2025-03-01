@@ -1344,20 +1344,20 @@ body {
   .header-bottom {
     position: fixed;
     top: 0;
-    left: -260px; /* Off-screen on the left */
+    left: -260px;
     max-width: 260px;
     width: 100%;
     height: 100vh;
     background-color: var(--xiketic);
     padding: 30px 20px;
     z-index: 1;
-    transition: transform 0.3s ease-in-out; /* Smooth slide animation */
-    opacity: 0; /* Ensure hidden state is consistent */
+    transition: transform 0.3s ease-in-out;
+    opacity: 0;
     visibility: hidden;
   }
 
   .header-bottom.active {
-    transform: translateX(260px); /* Slide menu into view */
+    transform: translateX(260px);
     opacity: 1;
     visibility: visible;
   }
@@ -1371,7 +1371,7 @@ body {
     background-color: var(--eerie-black_70);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease; /* Smooth overlay fade-in */
+    transition: opacity 0.3s ease;
   }
 
   .overlay.active {
@@ -1430,53 +1430,53 @@ body {
 
 @media (max-width: 767px) {
   .hero-title {
-    display: block; /* Ensure visibility */
-    font-size: 2rem; /* Adjust for smaller screens */
-    line-height: 1.2; /* Improve readability */
-    text-align: center; /* Center-align for mobile */
-    padding: 10px; /* Add padding for better spacing */
+    display: block;
+    font-size: 2rem;
+    line-height: 1.2;
+    text-align: center;
+    padding: 10px;
     color: var(--white-1);
   }
 
   .hero-content {
     padding: 15px;
-    overflow: visible !important; /* Optional: Add padding to the content area */
+    overflow: visible !important;
   }
 
   .hero {
-    padding-block-start: 50px; /* Adjust padding for the hero section on mobile */
+    padding-block-start: 50px;
   }
 }
 
 @media (max-width: 767px) {
   .h1 {
-    font-size: 2rem; /* Ensure a readable size on smaller screens */
+    font-size: 2rem;
   }
 }
 
 @media (max-width: 767px) {
   .dropdown-menu {
-    grid-template-columns: repeat(3, 1fr); /* Adjust to 3 columns */
-    gap: 10px; /* Maintain spacing between items */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
   }
 
   .dropdown-menu li a {
-    font-size: 1.4rem; /* Adjust font size for mobile readability */
+    font-size: 1.4rem;
   }
 }
 
 
 @media (min-width: 768px) {
   .map-container iframe {
-    width: 130%; /* Increase the width by 30% on desktop */
-    margin-left: -15%; /* Center the map by adjusting the left margin */
+    width: 130%;
+    margin-left: -15%;
   }
 }
 
-/*@media (max-width: 767px) {*/
-/*  .card-action .action-btn {*/
-/*    display: none; !* Hide the quick view button on mobile *!*/
-/*  }*/
-/*}*/
+@media (max-width: 767px) {
+  .card-action .action-btn {
+    display: none; 
+  }
+}
 
 
