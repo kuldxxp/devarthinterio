@@ -50,7 +50,7 @@ body {
 
 .product {
   background: #fff;
-  padding: 1.5rem;
+  padding: 0.5rem;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
@@ -107,7 +107,16 @@ body {
   height: auto;
   object-fit: contain;
 }
+.scrollable-gallery {
+  max-height: 70vh; /* Set a max height relative to viewport */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-right: 10px; /* Prevent content from being hidden under scrollbar */
+}
 
+/* Hide Scrollbar for WebKit Browsers */
+.scrollable-gallery::-webkit-scrollbar {
+  width: 8px;
+}
 
 /* Responsive Grid */
 @media screen and (min-width: 1200px) {
